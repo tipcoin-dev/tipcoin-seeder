@@ -35,7 +35,7 @@ public:
   CDnsSeedOpts() : nThreads(96), nDnsThreads(4), nPort(53), mbox(NULL), ns(NULL), host(NULL), tor(NULL), fUseTestNet(false), fWipeBan(false), fWipeIgnore(false), ipv4_proxy(NULL), ipv6_proxy(NULL) {}
 
   void ParseCommandLine(int argc, char **argv) {
-    static const char *help = "Monacoin-seeder\n"
+    static const char *help = "Tipcoin-seeder\n"
                               "Usage: %s -h <host> -n <ns> [-m <mbox>] [-t <threads>] [-p <port>]\n"
                               "\n"
                               "Options:\n"
@@ -404,13 +404,13 @@ extern "C" void* ThreadStats(void*) {
   return nullptr;
 }
 
-static const string mainnet_seeds[] = {"dnsseed.monacoin.org", "monacoin.org", "dnsseed.tamami-foundation.org", ""};
-static const string testnet_seeds[] = {"testnet-dnsseed.monacoin.org", ""};
+static const string mainnet_seeds[] = {"dnsseed.tipcoin.us", ""};
+static const string testnet_seeds[] = {"testnet-dnsseed.tipcoin.us", ""};
 static const string *seeds = mainnet_seeds;
 
 extern "C" void* ThreadSeeder(void*) {
   if (!fTestNet){
-    db.Add(CService("v6g5w46hgahte7ff.onion", 9401), true);
+    // db.Add(CService("v6g5w46hgahte7ff.onion", 9469), true);
   }
   do {
     for (int i=0; seeds[i] != ""; i++) {

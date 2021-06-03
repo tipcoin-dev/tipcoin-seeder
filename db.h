@@ -14,9 +14,10 @@
 
 #define REQUIRE_VERSION 70002
 
+// Return 2000 when on testnet and return 0 when on mainnet
 static inline int GetRequireHeight(const bool testnet = fTestNet)
 {
-    return testnet ? 2000 : 1452255;
+    return testnet ? 2000 : 0;
 }
 
 std::string static inline ToString(const CService &ip) {

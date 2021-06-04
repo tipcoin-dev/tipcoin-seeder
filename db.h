@@ -17,7 +17,7 @@
 // Return 2000 when on testnet and return 0 when on mainnet
 static inline int GetRequireHeight(const bool testnet = fTestNet)
 {
-    return testnet ? 2000 : 0;
+    return testnet ? 2000 : 6;
 }
 
 std::string static inline ToString(const CService &ip) {

@@ -1,7 +1,7 @@
-litecoin-seeder
+tipcoin-seeder
 ===============
 
-Litecoin-seeder is a crawler for the Litecoin network, which exposes a list
+Tipcoin-seeder is a crawler for the Tipcoin network, which exposes a list
 of reliable nodes via a built-in DNS server.
 
 Features:
@@ -26,14 +26,14 @@ Assuming you want to run a dns seed on dnsseed.example.com, you will
 need an authorative NS record in example.com's domain record, pointing
 to for example vps.example.com:
 
-$ dig -t NS dnsseed.example.com
+    $ dig -t NS dnsseed.example.com
 
 ;; ANSWER SECTION
 dnsseed.example.com.   86400    IN      NS     vps.example.com.
 
 On the system vps.example.com, you can now run dnsseed:
 
-./dnsseed -h dnsseed.example.com -n vps.example.com
+    ./dnsseed -h dnsseed.example.com -n vps.example.com
 
 If you want the DNS server to report SOA records, please provide an
 e-mail address (with the @ part replaced by .) using -m.
@@ -43,7 +43,7 @@ COMPILING
 Compiling will require boost and ssl.  On debian systems, these are provided
 by `libboost-dev` and `libssl-dev` respectively.
 
-$ make
+    $ make
 
 This will produce the `dnsseed` binary.
 
@@ -56,7 +56,21 @@ Typically, you'll need root privileges to listen to port 53 (name service).
 One solution is using an iptables rule (Linux only) to redirect it to
 a non-privileged port:
 
-$ iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-port 5353
+    $ iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-port 5353
 
 If properly configured, this will allow you to run dnsseed in userspace, using
 the -p 5353 option.
+
+UBUNTU
+------
+Recent Ubuntu versions have a DNS stub resolver with takes over port 53, and
+stops seeder from seeing and answering queries.  redirect external DNS queries to a non-standard port: 
+
+    srcPort=53
+    dstPort=5353
+    iptables -t nat -A PREROUTING -i eth0 -p tcp --dport $srcPort -j REDIRECT --to-port $dstPort
+    iptables -t nat -A PREROUTING -i eth0 -p udp --dport $srcPort -j REDIRECT --to-port $dstPort
+
+and configure seeder to answer queries on that port:
+
+    ./dnsseed -h <sub-domain.domain.tld> -n <ip-address> -p 5353 -m <admin@email.com>
